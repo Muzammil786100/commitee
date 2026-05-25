@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl" id="app-html">
 <head>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="google" content="notranslate"> 
-    <title>Muzammil Hussain Committee</title>
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    </head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Muzammil Hussain Committee</title>
@@ -456,7 +448,7 @@
             
             <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 14px; border-radius: var(--radius-sm); border: 1px solid rgba(59, 130, 246, 0.2);">
                 <input type="checkbox" id="field-edit-payout" style="width: 24px; height: 24px; accent-color: var(--accent); cursor: pointer;">
-                <label style="font-size: 17px; font-weight: 700; cursor: pointer; color: var(--accent);" for="field-edit-payout" data-i18n="editMemCheck">کیا اس ممبر کی کمیٹی نکل چکی ہے؟</label>
+                <label style="font-size: 17px; font-weight: 700; cursor: pointer; color: var(--accent);" for="field-edit-payout" data-i18n="editMemCheck">کیا اس ممبر کی کمیٹی نکل چکی ہے?</label>
             </div>
 
             <div class="modal-footer" style="display: flex; gap: 10px; align-items: stretch;">
@@ -527,6 +519,49 @@
         </div>
     </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+        // آپ کا اصل فائر بیس کلاؤڈ انجن کنفیگریشن
+        const firebaseConfig = {
+            apiKey: "AIzaSyCc2of8KyviCpZxKALccSo--1iBQbCx6OU",
+            authDomain: "muzammil-community.firebaseapp.com",
+            databaseURL: "https://muzammil-community-default-rtdb.firebaseio.com",
+            projectId: "muzammil-community",
+            storageBucket: "muzammil-community.firebasestorage.app",
+            messagingSenderId: "385001351220",
+            appId: "1:385001351220:web:1dabb26cddf1044a424261",
+            measurementId: "G-V4Y6ZHK2J3"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const dbRef = ref(database, 'committee_data');
+
+        // Global instances setup for standard script accessibility
+        window.firebaseDatabaseInstance = database;
+        window.firebaseDataReference = dbRef;
+
+        // Cloud Realtime Listener (డేటా رئیل ٹائم میں کلاؤڈ سے سنک ہوگا)
+        if (navigator.onLine) {
+            onValue(dbRef, (snapshot) => {
+                const cloudData = snapshot.val();
+                if (cloudData && cloudData.members) {
+                    window.db = cloudData;
+                    localStorage.setItem('__ROSCA_PRO_DB__', JSON.stringify(window.db));
+                    window.executeDashboardCalculations();
+                    
+                    // لائیو ویو اپڈیٹ ہینڈلر
+                    if(document.getElementById('view-members').classList.contains('active')) window.buildMembersDirectory();
+                    if(document.getElementById('view-collection').classList.contains('active')) window.buildCollectionInterface();
+                    if(document.getElementById('view-reports').classList.contains('active')) window.buildLedgerMatrix();
+                }
+            });
+        }
+    </script>
+
     <script>
         let db = {
             members: [],
@@ -559,7 +594,7 @@
                 trxAdd: "کھاتے میں شامل کریں", searchPlace: "ممبر تلاش کریں...", loginNamePlace: "اپنا نام درج کریں (Enter Name)",
                 strDrawn: "وصول شدہ", strCollect: "وصول", strFullyPaid: "مکمل ادا شدہ",
                 btnDelete: "حذف کریں", btnReset: "نیا سائیکل شروع کریں (بیلنس زیرو)",
-                cfgSecurity: "سیکیورٹی اور رسائی", cfgPin: "سستم کا پِن کوڈ (PIN)"
+                cfgSecurity: "سیکیورٹی اور رسائی", cfgPin: "سسٹم کا پِن کوڈ (PIN)"
             },
             en: {
                 appTitle: "Muzammil Hussain Committee", appSub: "Management System", loginBtn: "Login / Access System",
@@ -582,7 +617,8 @@
             }
         };
 
-        function applyLanguageStrings() {
+        function toggleLanguage() {
+            currentLang = currentLang === 'ur' ? 'en' : 'ur';
             document.getElementById('app-html').dir = currentLang === 'ur' ? 'rtl' : 'ltr';
             document.getElementById('payout-card-border').style.borderRight = currentLang === 'ur' ? '5px solid var(--status-paid)' : 'none';
             document.getElementById('payout-card-border').style.borderLeft = currentLang === 'en' ? '5px solid var(--status-paid)' : 'none';
@@ -598,11 +634,6 @@
             document.getElementById('lang-ind').innerText = currentLang === 'ur' ? 'EN' : 'UR';
             document.getElementById('member-search-input').placeholder = i18n[currentLang].searchPlace;
             document.getElementById('login-name').placeholder = i18n[currentLang].loginNamePlace;
-        }
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'ur' ? 'en' : 'ur';
-            applyLanguageStrings();
             
             if(document.getElementById('view-members').classList.contains('active')) buildMembersDirectory();
             if(document.getElementById('view-collection').classList.contains('active')) buildCollectionInterface();
@@ -619,7 +650,6 @@
             document.getElementById('live-date-stamp').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             executeDashboardCalculations();
             updateNetworkStatus();
-            applyLanguageStrings();
         }
 
         function saveStateToHardware() { 
@@ -651,8 +681,14 @@
         window.addEventListener('offline', updateNetworkStatus);
 
         function triggerCloudSync() {
-            console.log("Data is online. Syncing/Uploading data seamlessly...");
             pendingSync = false;
+            if(window.firebaseDatabaseInstance && window.firebaseDataReference) {
+                import("https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js").then((M) => {
+                    M.set(window.firebaseDataReference, db)
+                     .then(() => console.log("Cloud sync completed successfully!"))
+                     .catch((err) => console.error("Cloud sync failed:", err));
+                });
+            }
         }
 
         function attemptAuthentication() {
@@ -668,8 +704,6 @@
             if (userName.toLowerCase() === "muzammil hussain" && pinGate === db.settings.securityPin) {
                 document.getElementById('login-screen').classList.remove('active');
                 document.getElementById('app-screen').classList.add('active');
-                applyLanguageStrings();
-                executeDashboardCalculations();
             } else {
                 alert(currentLang === 'ur' ? "❌ غلط نام یا پِن کوڈ!" : "❌ Incorrect Name or PIN!");
                 document.getElementById('pin-field').value = "";
@@ -1008,8 +1042,9 @@
                 try {
                     let parsedData = JSON.parse(e.target.result);
                     if (parsedData.members && parsedData.settings) {
-                        localStorage.setItem('__ROSCA_PRO_DB__', JSON.stringify(parsedData));
-                        alert(currentLang === 'ur' ? "ڈیٹا بیس کامیابی سے بحال ہو گیا ہے! براہ کرم نئے ڈیٹا کے ساتھ لاگ ان کریں۔" : "Database restored! Please log in again to view new data.");
+                        db = parsedData;
+                        saveStateToHardware();
+                        alert(currentLang === 'ur' ? "ڈیٹا بیس کامیابی سے بحال ہو گیا ہے!" : "Database restored!");
                         location.reload();
                     }
                 } catch (err) { alert(currentLang === 'ur' ? "بیک اپ فائل خراب ہے۔" : "Invalid JSON Backup file."); }
@@ -1036,11 +1071,6 @@
                 navigator.serviceWorker.register('/sw.js').catch(err => console.log('ServiceWorker handling skipped. Run on a server for full setup.'));
             });
         }
-        
-        // Auto-initialize language on page load before login checks
-        window.addEventListener('DOMContentLoaded', () => {
-            applyLanguageStrings();
-        });
     </script>
 </body>
 </html>
