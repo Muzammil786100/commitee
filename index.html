@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" id="app-html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Muzammil Hussain Committee</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Modern Premium Design System */
+        :root {
+            --primary: #0a0f1d;       
+            --accent: #3b82f6;        
+            --accent-gradient: linear-gradient(135deg, #2563eb, #1d4ed8);
+            --bg-main: #f8fafc;       
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #edf2f7;
+            
+            --status-paid: #10b981;     
+            --status-pending: #f43f5e;  
+            --status-partial: #f59e0b;  
+            
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --shadow-sm: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 12px 24px -6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Typography */
+            --font-urdu: 'Noto Nastaliq Urdu', serif;
+            --font-eng: 'Plus Jakarta Sans', sans-serif;
+            --font-main: var(--font-urdu);
+        }
+
+        html[dir="ltr"] { --font-main: var(--font-eng); }
+        html[dir="rtl"] { --font-main: var(--font-urdu); }
+
+        .dark-mode {
+            --primary: #f8fafc;
+            --accent: #60a5fa;
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #2563eb);
+            --bg-main: #000000;       
+            --surface: #111827;       
+            --text-main: #ffffff;     
+            --text-muted: #9ca3af;
+            --border: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a { text-decoration: none !important; }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+            font-size: 16px;
+            font-family: var(--font-main);
+            line-height: 1.8;
+        }
+
+        .screen { display: none; min-height: 100vh; }
+        .screen.active { display: flex; flex-direction: column; }
+
+        #login-screen {
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+        }
+
+        .login-card {
+            background: var(--surface);
+            padding: 40px 32px;
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .login-card h2 { font-weight: 700; font-size: 26px; margin-bottom: 5px; color: var(--accent);}
+
+        .pin-container { margin: 28px 0; display: flex; flex-direction: column; gap: 14px; }
+        .login-input {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: var(--transition);
+            background: var(--bg-main);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            font-weight: bold;
+        }
+        .pin-input {
+            letter-spacing: 16px;
+            font-size: 28px;
+            font-family: var(--font-eng);
+            direction: ltr;
+        }
+        .login-input:focus { border-color: #2563eb; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
+
+        .app-header {
+            background: rgba(var(--surface), 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 18px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .app-header h2 { font-size: 22px; font-weight: 700; line-height: 1.2; color: var(--accent); }
+        .app-header span { font-size: 13px; color: var(--text-muted); display: block; font-weight: 600; font-family: var(--font-eng); margin-top: 5px;}
+        
+        .app-content { flex: 1; padding: 20px; padding-bottom: 110px; width: 100%; max-width: 1200px; margin: 0 auto; }
+
+        .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+        @media (min-width: 768px) {
+            .summary-grid { grid-template-columns: repeat(4, 1fr); }
+            .list-container { display: grid !important; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+            .bottom-nav { justify-content: center !important; gap: 60px; }
+            .nav-item { flex: none !important; width: 110px; }
+        }
+
+        .summary-card { 
+            background: var(--surface); padding: 20px; border-radius: var(--radius-md); 
+            border: 1px solid var(--border); position: relative; overflow: hidden;
+            box-shadow: var(--shadow-sm); transition: var(--transition);
+        }
+        .summary-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: rgba(59, 130, 246, 0.3); }
+        .summary-card i { position: absolute; html[dir="rtl"] & { left: 16px; right: auto; } html[dir="ltr"] & { right: 16px; left: auto; } bottom: 16px; font-size: 38px; color: var(--accent); opacity: 0.08; transition: var(--transition); }
+        .summary-card:hover i { opacity: 0.15; transform: scale(1.1); }
+        .summary-card p { font-size: 14px; color: var(--text-muted); font-weight: 700; }
+        .summary-card h3 { font-size: 24px; font-weight: 700; margin-top: 6px; font-family: var(--font-eng); }
+
+        .view { display: none; }
+        .view.active { display: block; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes slideUp { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .search-container { position: relative; margin-bottom: 20px; }
+        .search-container i { position: absolute; html[dir="rtl"] & { right: 18px; left: auto; } html[dir="ltr"] & { left: 18px; right: auto; } top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 18px; }
+
+        .form-control {
+            width: 100%; background: var(--surface);
+            border: 1px solid var(--border); color: var(--text-main); border-radius: var(--radius-md);
+            outline: none; font-size: 16px; transition: var(--transition); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+            font-family: var(--font-main);
+        }
+        html[dir="rtl"] .search-container .form-control { padding: 16px 48px 16px 16px; }
+        html[dir="ltr"] .search-container .form-control { padding: 16px 16px 16px 48px; }
+        .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); background: var(--surface); }
+        .form-control.no-icon { padding: 14px 16px; }
+
+        .list-container { display: flex; flex-direction: column; gap: 14px; }
+        .member-card { 
+            background: var(--surface); padding: 18px 20px; border-radius: var(--radius-md); 
+            border: 1px solid var(--border); display: flex; justify-content: space-between; 
+            align-items: center; box-shadow: var(--shadow-sm); transition: var(--transition);
+        }
+        .member-card:hover { box-shadow: var(--shadow-md); border-color: rgba(59, 130, 246, 0.3); transform: translateY(-2px); }
+        .member-card-right { display: flex; align-items: center; gap: 16px; }
+        
+        .member-avatar {
+            width: 48px; height: 48px; border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(37, 99, 235, 0.2)); 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; color: var(--accent); font-size: 16px; font-family: var(--font-eng);
+        }
+
+        .beautiful-name {
+            font-family: var(--font-urdu) !important;
+            font-size: 20px !important;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-main);
+        }
+
+        .m-status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; html[dir="rtl"] & { margin-left: 10px; margin-right: 0; } html[dir="ltr"] & { margin-right: 10px; margin-left: 0; } }
+        .status-paid { background-color: var(--status-paid); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2); }
+        .status-pending { background-color: var(--status-pending); box-shadow: 0 0 0 4px rgba(244, 63, 94, 0.2); }
+        .status-partial { background-color: var(--status-partial); box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2); }
+
+        .btn { padding: 14px 24px; border: none; border-radius: var(--radius-md); font-size: 16px; font-weight: 700; font-family: var(--font-main); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%; transition: var(--transition); text-decoration: none; }
+        .btn-primary { background: var(--accent-gradient); color: white; box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25); }
+        .btn-primary:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35); }
+        .btn-secondary { background: var(--surface); color: var(--text-main); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        .btn-secondary:hover { background: var(--bg-main); border-color: var(--text-muted); }
+        .btn-sm { padding: 8px 14px; font-size: 14px; width: auto; border-radius: var(--radius-sm); }
+        
+        .btn-whatsapp { 
+            background: #25D366; color: #ffffff !important; padding: 10px 14px; border-radius: var(--radius-sm); 
+            border: none; cursor: pointer; font-size: 20px; transition: var(--transition); 
+            display: inline-flex; align-items: center; justify-content: center; text-decoration: none !important;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+        }
+        .btn-whatsapp:hover { background: #128C7E; transform: translateY(-3px); box-shadow: 0 6px 14px rgba(37, 211, 102, 0.4); }
+
+        .bottom-nav {
+            position: fixed; bottom: 16px; left: 16px; right: 16px; 
+            background: rgba(var(--surface), 0.9); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--border); border-radius: 24px;
+            display: flex; justify-content: space-around; padding: 12px 8px; 
+            z-index: 100; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.15);
+        }
+        .nav-item { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; font-size: 14px; font-weight: 700; font-family: var(--font-main); cursor: pointer; flex: 1; padding: 6px 0; border-radius: 16px; transition: var(--transition); }
+        .nav-item i { font-size: 20px; margin-bottom: 6px; transition: var(--transition); }
+        .nav-item.active { color: #2563eb; background: rgba(37, 99, 235, 0.08); }
+        .dark-mode .nav-item.active { color: #60a5fa; background: rgba(96, 165, 250, 0.1); }
+        .nav-item:hover i { transform: translateY(-3px); color: var(--accent); }
+
+        .table-responsive { width: 100%; overflow-x: auto; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        .ledger-table { width: 100%; border-collapse: collapse; text-align: right; }
+        html[dir="ltr"] .ledger-table { text-align: left; }
+        .ledger-table th, .ledger-table td { padding: 16px 20px; font-size: 15px; border-bottom: 1px solid var(--border); }
+        .ledger-table th { background: var(--bg-main); color: var(--text-muted); font-weight: 700; font-size: 16px; }
+        .ledger-table td.eng-font { font-family: var(--font-eng); }
+
+        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 200; opacity: 0; transition: opacity 0.3s ease; padding: 20px;}
+        .modal.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--surface); width: 100%; max-width: 480px; padding: 32px; border-radius: var(--radius-lg); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); border: 1px solid var(--border); transform: scale(0.95) translateY(20px); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); max-height: 90vh; overflow-y: auto;}
+        .modal.active .modal-content { transform: scale(1) translateY(0); }
+        .modal-title { font-size: 24px; font-weight: 700; margin-bottom: 20px; color: var(--accent); }
+        .modal-footer { display: flex; gap: 14px; margin-top: 28px; }
+
+        #network-status {
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-family: var(--font-eng);
+            transition: var(--transition);
+        }
+
+        @media print {
+            .bottom-nav, .app-header, .action-block, .btn, .search-container, .modal, .edit-action-btn, .btn-whatsapp { display: none !important; }
+            body, .app-content, .view, .table-responsive { background: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; overflow: visible !important; width: 100% !important; box-shadow: none !important;}
+            .ledger-table { width: 100% !important; border: 1px solid #000000 !important; }
+            .ledger-table th { background: #f1f5f9 !important; color: #000000 !important; border-bottom: 2px solid #000000 !important; }
+            .ledger-table td { border-bottom: 1px solid #e2e8f0 !important; color: #000000 !important; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 30px; }
+        }
+        .print-header { display: none; }
+        .eng-text { font-family: var(--font-eng); display: inline-block; direction: ltr; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen" class="screen active">
+        <div class="login-card">
+            <div style="font-size: 56px; color: #2563eb; margin-bottom: 16px;"><i class="fas fa-sack-dollar"></i></div>
+            <h2 data-i18n="appTitle">مزمل حسین کمیٹی</h2>
+            <p data-i18n="appSub" style="color: var(--text-muted); font-size: 16px; margin-bottom: 10px;">کمیٹی مینجمنٹ سسٹم</p>
+            <div class="pin-container">
+                <input type="text" id="login-name" class="login-input" placeholder="اپنا نام درج کریں (Enter Name)">
+                <input type="password" id="pin-field" class="login-input pin-input" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric">
+            </div>
+            <button onclick="attemptAuthentication()" class="btn btn-primary" data-i18n="loginBtn"><i class="fas fa-lock-open"></i> لاگ اِن / رسائی حاصل کریں</button>
+        </div>
+    </div>
+
+    <div id="app-screen" class="screen">
+        <header class="app-header">
+            <div>
+                <h2 data-i18n="dashHeader">مزمل حسین کمیٹی</h2>
+                <span id="global-subtitle" class="eng-text">Daily: Rs. 0 | Cycle: 0 Days</span>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <span id="network-status" style="color: var(--status-paid); background: rgba(16, 185, 129, 0.1);"><i class="fas fa-wifi"></i> Online</span>
+                <button onclick="toggleLanguage()" class="btn btn-secondary btn-sm" title="Change Language"><i class="fas fa-language"></i> <span id="lang-ind" class="eng-text" style="font-size:12px; font-weight:bold; margin-left:4px;">EN</span></button>
+                <button onclick="triggerThemeEngine()" class="btn btn-secondary btn-sm"><i class="fas fa-moon"></i></button>
+                <button onclick="openConfigModal()" class="btn btn-secondary btn-sm"><i class="fas fa-sliders"></i></button>
+            </div>
+        </header>
+
+        <main class="app-content">
+            <section id="view-dashboard" class="view active">
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <p data-i18n="totMembers">کُل ممبران</p>
+                        <h3 id="stat-total-members">0</h3>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="summary-card" style="border-top: 4px solid #3b82f6;">
+                        <p data-i18n="targetFund">متوقع فنڈ</p>
+                        <h3 id="stat-targeted-amount" style="color: #3b82f6;">Rs. 0</h3>
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="summary-card">
+                        <p data-i18n="totCollected">کل جمع شدہ رقم</p>
+                        <h3 id="stat-total-collected">Rs. 0</h3>
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                    <div class="summary-card" style="border-top: 4px solid var(--status-pending);">
+                        <p data-i18n="pendDues">بقایا جات</p>
+                        <h3 id="stat-total-pending" style="color: var(--status-pending);">Rs. 0</h3>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="summary-card" style="border-right: 5px solid var(--status-paid); grid-column: span 2; background: rgba(16, 185, 129, 0.08);" id="payout-card-border">
+                        <p style="color: var(--status-paid); font-size: 16px;" data-i18n="currDraw">موجودہ قرعہ اندازی</p>
+                        <h3 id="stat-next-receiver" style="font-size: 24px; color: var(--text-main); margin-top: 6px;" class="eng-text">--</h3>
+                        <span id="stat-next-date" style="display:block; margin-top:8px; font-size:16px; font-weight:700; color: var(--status-paid); font-family: var(--font-eng);"><i class="fas fa-calendar-check"></i> Date: --</span>
+                        <i class="fas fa-gift" style="color: var(--status-paid);"></i>
+                    </div>
+                </div>
+
+                <div class="action-block" style="background: var(--surface); padding: 24px; border-radius: var(--radius-md); border:1px solid var(--border); box-shadow: var(--shadow-sm);">
+                    <h4 style="margin-bottom: 16px; font-size: 20px; font-weight: 700; color: var(--accent);" data-i18n="backupTitle">ڈیٹا بیک اپ اور ریکوری</h4>
+                    <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+                        <button onclick="triggerDataExport()" class="btn btn-primary" style="font-size: 16px; flex: 1;"><i class="fas fa-cloud-arrow-down"></i> <span data-i18n="btnBackup">بیک اپ ڈاؤنلوڈ</span></button>
+                        <label class="btn btn-secondary" style="font-size: 16px; cursor: pointer; flex: 1; text-align: center; justify-content: center;">
+                            <i class="fas fa-cloud-arrow-up"></i> <span data-i18n="btnRestore">فائل ریسٹور کریں</span>
+                            <input type="file" id="import-gate" style="display: none;" onchange="triggerDataImport(event)" accept=".json">
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <section id="view-members" class="view">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="dirTitle">ممبران کی فہرست</h3>
+                    <button onclick="openModal('add-member-modal')" class="btn btn-primary btn-sm" style="padding: 10px 18px;"><i class="fas fa-user-plus"></i> <span data-i18n="newMember">نیا ممبر</span></button>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="member-search-input" class="form-control" placeholder="ممبر تلاش کریں..." onkeyup="buildMembersDirectory()">
+                </div>
+                <div id="directory-render-target" class="list-container"></div>
+            </section>
+
+            <section id="view-collection" class="view">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="colTitle">روزانہ وصولی</h3>
+                    <span id="live-date-stamp" class="eng-text" style="font-weight: 700; font-size: 15px; color: var(--accent); background: rgba(59, 130, 246, 0.1); padding: 6px 12px; border-radius: 8px;"></span>
+                </div>
+                <div id="collection-render-target" class="list-container"></div>
+            </section>
+
+            <section id="view-reports" class="view">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;" class="action-block">
+                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="repTitle">تفصیلی کھاتہ رپورٹ</h3>
+                    <button onclick="executeSystemPrint()" class="btn btn-primary btn-sm" style="padding: 10px 18px;"><i class="fas fa-print"></i> <span data-i18n="printBtn">پرنٹ کریں</span></button>
+                </div>
+
+                <div id="print-zone-wrapper">
+                    <div class="print-header">
+                        <h1 style="font-size: 30px; font-weight: 700; text-align: center; font-family: var(--font-urdu);" data-i18n="printHead">مزمل حسین کمیٹی کھاتہ رپورٹ</h1>
+                        <p style="font-size: 16px; text-align: center; margin-top: 6px; font-family: var(--font-eng);">Report Generated on: <span class="stamp-placeholder"></span></p>
+                        <hr style="margin: 20px 0; border: 0; border-top: 2px solid #0f172a;">
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="ledger-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th data-i18n="thName">ممبر کا نام</th>
+                                    <th data-i18n="thPaid">جمع شدہ</th>
+                                    <th data-i18n="thDues">بقایا جات</th>
+                                    <th data-i18n="thStatus">سٹیٹس</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledger-rows-target"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="activateAppView('dashboard', this)">
+                <i class="fas fa-chart-pie"></i><span data-i18n="navDash">ڈیش بورڈ</span>
+            </button>
+            <button class="nav-item" onclick="activateAppView('members', this)">
+                <i class="fas fa-id-card-clip"></i><span data-i18n="navDir">ڈائریکٹری</span>
+            </button>
+            <button class="nav-item" onclick="activateAppView('collection', this)">
+                <i class="fas fa-hand-holding-dollar"></i><span data-i18n="navCol">وصولی</span>
+            </button>
+            <button class="nav-item" onclick="activateAppView('reports', this)">
+                <i class="fas fa-book-open"></i><span data-i18n="navRep">کھاتہ</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="add-member-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" data-i18n="addMemTitle"><i class="fas fa-user-plus"></i> نیا ممبر شامل کریں</h3>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemName">پورا نام</label>
+                <input type="text" id="field-m-name" class="form-control no-icon" style="font-family: var(--font-urdu);" placeholder="...">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemPhone">موبائل نمبر</label>
+                <input type="tel" id="field-m-phone" class="form-control no-icon" style="direction: ltr; text-align: left;" placeholder="0300XXXXXXX">
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('add-member-modal')" class="btn btn-secondary" data-i18n="btnCancel">منسوخ</button>
+                <button onclick="processMemberCreation()" class="btn btn-primary" data-i18n="btnSave"><i class="fas fa-check"></i> محفوظ کریں</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-member-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" data-i18n="editMemTitle"><i class="fas fa-user-pen"></i> ممبر کی معلومات میں ترمیم</h3>
+            <input type="hidden" id="edit-member-idx">
+            
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemName">نام</label>
+                <input type="text" id="field-edit-name" class="form-control no-icon" style="font-family: var(--font-urdu);">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemPhone">موبائل نمبر</label>
+                <input type="tel" id="field-edit-phone" class="form-control no-icon" style="direction: ltr; text-align: left;">
+            </div>
+            
+            <hr style="margin: 24px 0; border: 0; border-top: 1px dashed var(--border);">
+            
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block; color: var(--status-pending);" data-i18n="editMemBal">موجودہ بیلنس (ترمیم کے لیے)</label>
+                <input type="number" id="field-edit-bal" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold; font-size: 18px;">
+            </div>
+            
+            <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 14px; border-radius: var(--radius-sm); border: 1px solid rgba(59, 130, 246, 0.2);">
+                <input type="checkbox" id="field-edit-payout" style="width: 24px; height: 24px; accent-color: var(--accent); cursor: pointer;">
+                <label style="font-size: 17px; font-weight: 700; cursor: pointer; color: var(--accent);" for="field-edit-payout" data-i18n="editMemCheck">کیا اس ممبر کی کمیٹی نکل چکی ہے؟</label>
+            </div>
+
+            <div class="modal-footer" style="display: flex; gap: 10px; align-items: stretch;">
+                <button onclick="processMemberDeletion()" class="btn" style="background: #f43f5e; color: white; padding: 10px 15px; flex: none;" data-i18n="btnDelete" title="Delete Member"><i class="fas fa-trash"></i></button>
+                <button onclick="closeModal('edit-member-modal')" class="btn btn-secondary" style="flex: 1;" data-i18n="btnCancel">منسوخ</button>
+                <button onclick="processMemberUpdate()" class="btn btn-primary" style="flex: 2;" data-i18n="btnSaveChanges"><i class="fas fa-floppy-disk"></i> محفوظ کریں</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="config-sys-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" data-i18n="cfgTitle"><i class="fas fa-gear"></i> سیستم کی ترتیبات</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgDaily">روزانہ کی قسط (Rs.)</label>
+                <input type="number" id="cfg-sys-amount" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgCycle">کمیٹی کا دورانیہ (دن)</label>
+                <input type="number" id="cfg-sys-cycle" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold;">
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgDate">شروع ہونے کی تاریخ</label>
+                <input type="date" id="cfg-sys-startdate" class="form-control no-icon" style="direction: ltr; font-family: var(--font-eng);">
+            </div>
+            
+            <hr style="margin: 24px 0; border: 0; border-top: 1px dashed var(--border);">
+            
+            <h4 data-i18n="cfgSecurity" style="margin-bottom: 15px; color: var(--accent); font-weight: 700;">سیکیورٹی اور رسائی</h4>
+            <div style="margin-bottom: 20px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgPin">سسٹم کا پِن کوڈ (PIN)</label>
+                <input type="text" id="cfg-sys-pin" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold;" maxlength="4">
+            </div>
+
+            <hr style="margin: 24px 0; border: 0; border-top: 1px dashed var(--border);">
+            
+            <div style="margin-bottom: 20px;">
+                <button onclick="resetAllBalances()" class="btn btn-secondary" style="width: 100%; color: var(--status-pending); border-color: var(--status-pending);" data-i18n="btnReset">
+                    <i class="fas fa-rotate-right"></i> نیا سائیکل شروع کریں (بیلنس زیرو)
+                </button>
+            </div>
+
+            <div class="modal-footer">
+                <button onclick="closeModal('config-sys-modal')" class="btn btn-secondary" data-i18n="btnClose">بند کریں</button>
+                <button onclick="processSystemConfigUpdate()" class="btn btn-primary" data-i18n="btnSave"><i class="fas fa-check"></i> محفوظ کریں</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="trx-action-modal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-title" data-i18n="trxTitle"><i class="fas fa-money-bill-wave"></i> وصولی شامل کریں</h3>
+            <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 20px;">
+                <p id="trx-modal-subtitle" style="font-size: 17px; color: var(--text-main); font-family: var(--font-urdu); font-weight: bold; text-align: center; margin:0;"></p>
+            </div>
+            <input type="hidden" id="trx-active-member-id">
+            
+            <div style="margin-bottom: 24px;">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--accent); text-align: center;" data-i18n="trxAmount">وصولی کی رقم درج کریں</label>
+                <input type="number" id="trx-custom-amount" class="form-control no-icon" style="font-weight: bold; font-size: 28px; color: var(--status-paid); direction: ltr; text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.05); border-color: var(--status-paid);">
+            </div>
+            
+            <div style="display: flex; gap: 14px; margin-bottom: 12px;">
+                <button onclick="commitPaymentExecution()" class="btn btn-primary" style="background: var(--status-paid); width: 100%; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); font-size: 18px;"><i class="fas fa-plus-circle"></i> <span data-i18n="trxAdd">کھاتے میں شامل کریں</span></button>
+            </div>
+            <button onclick="closeModal('trx-action-modal')" class="btn btn-secondary" style="width: 100%;" data-i18n="btnCancel">منسوخ</button>
+        </div>
+    </div>
+
+    <script>
+        let db = {
+            members: [],
+            settings: {
+                dailyContribution: 100,
+                payoutDays: 15,
+                securityPin: "1234",
+                startDate: "2026-05-12"
+            }
+        };
+
+        let currentLang = 'ur';
+        let pendingSync = false;
+        
+        const i18n = {
+            ur: {
+                appTitle: "مزمل حسین کمیٹی", appSub: "کمیٹی مینجمنٹ سسٹم", loginBtn: "لاگ اِن / رسائی حاصل کریں",
+                dashHeader: "مزمل حسین کمیٹی", settings: "ترتیبات", totMembers: "کُل ممبران",
+                targetFund: "متوقع فنڈ", totCollected: "کل جمع شدہ رقم", pendDues: "بقایا جات",
+                currDraw: "موجودہ قرعہ اندازی", backupTitle: "ڈیٹا بیک اپ اور ریکوری", btnBackup: "بیک اپ ڈاؤنلوڈ",
+                btnRestore: "فائل ریسٹور کریں", dirTitle: "ممبران کی فہرست", newMember: "نیا ممبر",
+                colTitle: "روزانہ وصولی", repTitle: "تفصیلی کھاتہ رپورٹ", printBtn: "پرنٹ کریں",
+                printHead: "مزمل حسین کمیٹی کھاتہ رپورٹ", thName: "ممبر کا نام", thPaid: "جمع شدہ",
+                thDues: "بقایا جات", thStatus: "سٹیٹس", navDash: "ڈیش بورڈ", navDir: "ڈائریکٹری",
+                navCol: "وصولی", navRep: "کھاتہ", addMemTitle: "نیا ممبر شامل کریں", addMemName: "پورا نام",
+                addMemPhone: "موبائل نمبر", btnCancel: "منسوخ", btnSave: "محفوظ کریں", editMemTitle: "ممبر کی معلومات میں ترمیم",
+                editMemBal: "موجودہ بیلنس", editMemCheck: "کیا اس ممبر کی کمیٹی نکل چکی ہے؟", btnSaveChanges: "تبدیلیاں محفوظ کریں",
+                cfgTitle: "سستم کی ترتیبات", cfgDaily: "روزانہ کی قسط (Rs.)", cfgCycle: "کمیٹی کا دورانیہ (دن)",
+                cfgDate: "شروع ہونے کی تاریخ", btnClose: "بند کریں", trxTitle: "وصولی شامل کریں", trxAmount: "وصولی کی رقم درج کریں",
+                trxAdd: "کھاتے میں شامل کریں", searchPlace: "ممبر تلاش کریں...", loginNamePlace: "اپنا نام درج کریں (Enter Name)",
+                strDrawn: "وصول شدہ", strCollect: "وصول", strFullyPaid: "مکمل ادا شدہ",
+                btnDelete: "حذف کریں", btnReset: "نیا سائیکل شروع کریں (بیلنس زیرو)",
+                cfgSecurity: "سیکیورٹی اور رسائی", cfgPin: "سسٹم کا پِن کوڈ (PIN)"
+            },
+            en: {
+                appTitle: "Muzammil Hussain Committee", appSub: "Management System", loginBtn: "Login / Access System",
+                dashHeader: "Muzammil Hussain Committee", settings: "Settings", totMembers: "Total Members",
+                targetFund: "Targeted Fund", totCollected: "Total Collected", pendDues: "Pending Dues",
+                currDraw: "Current Draw", backupTitle: "Data Backup & Recovery", btnBackup: "Download Backup",
+                btnRestore: "Restore File", dirTitle: "Members Directory", newMember: "New Member",
+                colTitle: "Daily Collection", repTitle: "Ledger Report", printBtn: "Print Report",
+                printHead: "Muzammil Hussain Committee Ledger", thName: "Member Name", thPaid: "Paid",
+                thDues: "Dues", thStatus: "Status", navDash: "Dashboard", navDir: "Directory",
+                navCol: "Collection", navRep: "Ledger", addMemTitle: "Register Member", addMemName: "Full Name",
+                addMemPhone: "Mobile Number", btnCancel: "Cancel", btnSave: "Save", editMemTitle: "Edit Member Info",
+                editMemBal: "Current Balance", editMemCheck: "Has member received payout?", btnSaveChanges: "Save Changes",
+                cfgTitle: "System Settings", cfgDaily: "Daily Installment (Rs.)", cfgCycle: "Payout Cycle (Days)",
+                cfgDate: "Official Start Date", btnClose: "Close", trxTitle: "Add Collection", trxAmount: "Enter Collection Amount",
+                trxAdd: "Add to Ledger", searchPlace: "Search members...", loginNamePlace: "Enter your name...",
+                strDrawn: "Drawn", strCollect: "Collect", strFullyPaid: "Fully Paid",
+                btnDelete: "Delete", btnReset: "New Cycle (Reset Balances)",
+                cfgSecurity: "Security & Access", cfgPin: "System PIN Code"
+            }
+        };
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ur' ? 'en' : 'ur';
+            document.getElementById('app-html').dir = currentLang === 'ur' ? 'rtl' : 'ltr';
+            document.getElementById('payout-card-border').style.borderRight = currentLang === 'ur' ? '5px solid var(--status-paid)' : 'none';
+            document.getElementById('payout-card-border').style.borderLeft = currentLang === 'en' ? '5px solid var(--status-paid)' : 'none';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                let key = el.getAttribute('data-i18n');
+                if(i18n[currentLang][key]) {
+                    let iconHtml = el.querySelector('i') ? el.querySelector('i').outerHTML + ' ' : '';
+                    el.innerHTML = iconHtml + i18n[currentLang][key];
+                }
+            });
+            
+            document.getElementById('lang-ind').innerText = currentLang === 'ur' ? 'EN' : 'UR';
+            document.getElementById('member-search-input').placeholder = i18n[currentLang].searchPlace;
+            document.getElementById('login-name').placeholder = i18n[currentLang].loginNamePlace;
+            
+            if(document.getElementById('view-members').classList.contains('active')) buildMembersDirectory();
+            if(document.getElementById('view-collection').classList.contains('active')) buildCollectionInterface();
+            if(document.getElementById('view-reports').classList.contains('active')) buildLedgerMatrix();
+        }
+
+        function runDatabaseOrchestrator() {
+            const cache = localStorage.getItem('__ROSCA_PRO_DB__');
+            if (cache) {
+                try { db = JSON.parse(cache); } catch(e) { console.error(e); }
+            }
+            if(!db.settings.startDate) db.settings.startDate = "2026-05-12";
+            
+            document.getElementById('live-date-stamp').innerText = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            executeDashboardCalculations();
+            updateNetworkStatus();
+        }
+
+        function saveStateToHardware() { 
+            localStorage.setItem('__ROSCA_PRO_DB__', JSON.stringify(db)); 
+            if (!navigator.onLine) {
+                pendingSync = true;
+            } else {
+                triggerCloudSync();
+            }
+        }
+
+        function updateNetworkStatus() {
+            const netStatus = document.getElementById('network-status');
+            if (navigator.onLine) {
+                netStatus.innerHTML = `<i class="fas fa-wifi"></i> Online`;
+                netStatus.style.color = 'var(--status-paid)';
+                netStatus.style.background = 'rgba(16, 185, 129, 0.1)';
+                if (pendingSync) {
+                    triggerCloudSync();
+                }
+            } else {
+                netStatus.innerHTML = `<i class="fas fa-wifi-slash"></i> Offline`;
+                netStatus.style.color = 'var(--status-pending)';
+                netStatus.style.background = 'rgba(244, 63, 94, 0.1)';
+            }
+        }
+
+        window.addEventListener('online', updateNetworkStatus);
+        window.addEventListener('offline', updateNetworkStatus);
+
+        function triggerCloudSync() {
+            console.log("Data is online. Syncing/Uploading data seamlessly...");
+            pendingSync = false;
+        }
+
+        function attemptAuthentication() {
+            const userName = document.getElementById('login-name').value.trim();
+            const pinGate = document.getElementById('pin-field').value;
+
+            if (!userName) {
+                return alert(currentLang === 'ur' ? "براہ کرم اپنا نام درج کریں۔" : "Please enter your name.");
+            }
+
+            runDatabaseOrchestrator();
+
+            if (userName.toLowerCase() === "muzammil hussain" && pinGate === db.settings.securityPin) {
+                document.getElementById('login-screen').classList.remove('active');
+                document.getElementById('app-screen').classList.add('active');
+            } else {
+                alert(currentLang === 'ur' ? "❌ غلط نام یا پِن کوڈ!" : "❌ Incorrect Name or PIN!");
+                document.getElementById('pin-field').value = "";
+            }
+        }
+
+        function activateAppView(viewTarget, elementRef) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(`view-${viewTarget}`).classList.add('active');
+            elementRef.classList.add('active');
+
+            if (viewTarget === 'dashboard') executeDashboardCalculations();
+            if (viewTarget === 'members') buildMembersDirectory();
+            if (viewTarget === 'collection') buildCollectionInterface();
+            if (viewTarget === 'reports') buildLedgerMatrix();
+        }
+
+        function executeDashboardCalculations() {
+            let totalCollected = db.members.reduce((acc, current) => acc + current.totalPaid, 0);
+            let targetTheoreticalPerMember = db.settings.dailyContribution * db.settings.payoutDays;
+            let totalTargetedAmount = db.members.length * targetTheoreticalPerMember;
+            let totalPendingDues = 0;
+
+            db.members.forEach(m => {
+                let delta = targetTheoreticalPerMember - m.totalPaid;
+                if (delta > 0) totalPendingDues += delta;
+            });
+
+            let nextPayoutName = "--";
+            let nextPayoutDateStr = "--";
+
+            if (db.members.length > 0 && db.settings.startDate) {
+                let start = new Date(db.settings.startDate);
+                start.setHours(0,0,0,0);
+                let today = new Date();
+                today.setHours(0,0,0,0);
+                
+                let timeDiff = today.getTime() - start.getTime();
+                let daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                if (daysPassed < 0) daysPassed = 0;
+                
+                let currentCycleIndex = Math.floor(daysPassed / db.settings.payoutDays);
+                let selectedIndex = currentCycleIndex % db.members.length; 
+                
+                if (db.members[selectedIndex]) {
+                    nextPayoutName = `#${selectedIndex + 1} - ${db.members[selectedIndex].name}`;
+                }
+                
+                let payoutDate = new Date(start.getTime() + ((currentCycleIndex + 1) * db.settings.payoutDays * 24 * 60 * 60 * 1000));
+                nextPayoutDateStr = payoutDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+            }
+
+            document.getElementById('stat-total-members').innerText = db.members.length;
+            document.getElementById('stat-targeted-amount').innerText = `Rs. ${totalTargetedAmount.toLocaleString()}`;
+            document.getElementById('stat-total-collected').innerText = `Rs. ${totalCollected.toLocaleString()}`;
+            document.getElementById('stat-total-pending').innerText = `Rs. ${totalPendingDues.toLocaleString()}`;
+            document.getElementById('stat-next-receiver').innerText = nextPayoutName;
+            document.getElementById('stat-next-date').innerHTML = `<i class="fas fa-calendar-check"></i> Date: ${nextPayoutDateStr}`;
+            document.getElementById('global-subtitle').innerText = `Daily: Rs. ${db.settings.dailyContribution} | Cycle: ${db.settings.payoutDays} Days`;
+        }
+
+        function buildMembersDirectory() {
+            const container = document.getElementById('directory-render-target');
+            const searchToken = document.getElementById('member-search-input').value.toLowerCase();
+            container.innerHTML = "";
+            let expectedThreshold = db.settings.dailyContribution * db.settings.payoutDays;
+
+            const filteredSet = db.members.filter(m => m.name.toLowerCase().includes(searchToken) || m.phone.includes(searchToken));
+
+            filteredSet.forEach((m) => {
+                let originalIndex = db.members.findIndex(member => member.id === m.id);
+                let pending = expectedThreshold - m.totalPaid;
+                
+                let waPhone = m.phone.replace(/[^0-9]/g, '');
+                if (waPhone.startsWith('0')) waPhone = '92' + waPhone.substring(1);
+                
+                let waMessage = "";
+                if(pending > 0) {
+                    waMessage = currentLang === 'ur' 
+                        ? encodeURIComponent(`السلام علیکم ${m.name}، آپ کی کمیٹی کے ${pending} روپے بقایا ہیں۔ براہ کرم جلد ادا کریں۔`)
+                        : encodeURIComponent(`Hello ${m.name}, your committee dues of Rs. ${pending} are pending. Please pay soon.`);
+                } else {
+                    waMessage = currentLang === 'ur'
+                        ? encodeURIComponent(`السلام علیکم ${m.name}، آپ کی کمیٹی کی تمام اقساط موصول ہو چکی ہیں۔ شکریہ!`)
+                        : encodeURIComponent(`Hello ${m.name}, all your committee dues are cleared. Thank you!`);
+                }
+
+                container.innerHTML += `
+                    <div class="member-card">
+                        <div class="member-card-right">
+                            <div class="member-avatar">#${originalIndex + 1}</div>
+                            <div>
+                                <h4 class="beautiful-name">${m.name}</h4>
+                                <p style="font-size:14px; color:var(--text-muted); font-family: var(--font-eng); direction: ltr; text-align: ${currentLang === 'ur' ? 'right' : 'left'};">${m.phone}</p>
+                            </div>
+                        </div>
+                        <div style="text-align: ${currentLang === 'ur' ? 'left' : 'right'}; display:flex; align-items:center; gap:14px; flex-wrap: wrap;">
+                            <div style="text-align: ${currentLang === 'ur' ? 'right' : 'left'};">
+                                <span class="eng-text" style="font-size:17px; font-weight:700; display:block; color:var(--accent);">Rs. ${m.totalPaid}</span>
+                                ${m.payoutReceived ? `<span style="font-size:12px; color:var(--status-paid); font-weight:bold; background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:6px; font-family: var(--font-main);"><i class="fas fa-check-circle"></i> ${i18n[currentLang].strDrawn}</span>` : ''}
+                            </div>
+                            <button onclick="invokeEditModal(${originalIndex})" class="btn btn-secondary btn-sm edit-action-btn" style="padding:10px; background:var(--bg-main);"><i class="fas fa-pen-to-square" style="color:var(--accent); font-size:16px;"></i></button>
+                            <a href="https://wa.me/${waPhone}?text=${waMessage}" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function buildCollectionInterface() {
+            const container = document.getElementById('collection-render-target');
+            container.innerHTML = "";
+            let expectedThreshold = db.settings.dailyContribution * db.settings.payoutDays;
+
+            db.members.forEach((m, idx) => {
+                let trackingStatusClass = "status-pending";
+                if(m.totalPaid >= expectedThreshold) { trackingStatusClass = "status-paid"; } 
+                else if(m.totalPaid > 0) { trackingStatusClass = "status-partial"; }
+                
+                let pending = expectedThreshold - m.totalPaid;
+                let waPhone = m.phone.replace(/[^0-9]/g, '');
+                if (waPhone.startsWith('0')) waPhone = '92' + waPhone.substring(1);
+                
+                let waMessage = "";
+                if(pending > 0) {
+                    waMessage = currentLang === 'ur' 
+                        ? encodeURIComponent(`السلام علیکم ${m.name}، آج کی کمیٹی کی قسط جمع کروا دیں۔ آپ کے ذمے ${pending} روپے بقایا ہیں۔ شکریہ۔`)
+                        : encodeURIComponent(`Hello ${m.name}, please submit today's installment. Your pending dues are Rs. ${pending}. Thank you.`);
+                } else {
+                    waMessage = currentLang === 'ur' ? encodeURIComponent(`السلام علیکم ${m.name}، آپ کا کھاتہ کلیئر ہے۔ شکریہ!`) : encodeURIComponent(`Hello ${m.name}, your account is fully cleared. Thanks!`);
+                }
+
+                container.innerHTML += `
+                    <div class="member-card">
+                        <div class="member-card-right">
+                            <span class="m-status-indicator ${trackingStatusClass}"></span>
+                            <div>
+                                <h4 class="beautiful-name" style="font-size: 19px !important;">#${idx + 1} - ${m.name}</h4>
+                                <p style="font-size:14px; color:var(--text-muted); font-family: var(--font-eng); direction:ltr; text-align:${currentLang === 'ur' ? 'right' : 'left'};">Balance: Rs. ${m.totalPaid}</p>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button onclick="invokeTransactionGateway(${m.id})" class="btn btn-primary btn-sm" style="background:var(--status-paid); border:none; box-shadow: 0 4px 10px rgba(16,185,129,0.2); font-family:var(--font-main); padding: 8px 16px;"><i class="fas fa-plus"></i> ${i18n[currentLang].strCollect}</button>
+                            <a href="https://wa.me/${waPhone}?text=${waMessage}" target="_blank" class="btn-whatsapp"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function invokeEditModal(index) {
+            let m = db.members[index];
+            document.getElementById('edit-member-idx').value = index;
+            document.getElementById('field-edit-name').value = m.name;
+            document.getElementById('field-edit-phone').value = m.phone;
+            document.getElementById('field-edit-bal').value = m.totalPaid;
+            document.getElementById('field-edit-payout').checked = m.payoutReceived;
+            openModal('edit-member-modal');
+        }
+
+        function processMemberUpdate() {
+            let idx = parseInt(document.getElementById('edit-member-idx').value);
+            let name = document.getElementById('field-edit-name').value.trim();
+            let phone = document.getElementById('field-edit-phone').value.trim();
+            let manualBalance = parseInt(document.getElementById('field-edit-bal').value);
+            let isPayoutReceived = document.getElementById('field-edit-payout').checked;
+
+            if (!name) return alert(currentLang === 'ur' ? "نام درج کرنا لازمی ہے۔" : "Name is required.");
+            
+            db.members[idx].name = name;
+            db.members[idx].phone = phone;
+            db.members[idx].totalPaid = isNaN(manualBalance) ? 0 : manualBalance;
+            db.members[idx].payoutReceived = isPayoutReceived;
+            
+            saveStateToHardware();
+            closeModal('edit-member-modal');
+            buildMembersDirectory();
+            executeDashboardCalculations();
+        }
+
+        function processMemberDeletion() {
+            let confirmMsg = currentLang === 'ur' 
+                ? "کیا آپ واقعی اس ممبر کو حذف (Delete) کرنا چاہتے ہیں؟" 
+                : "Are you sure you want to delete this member?";
+                
+            if(confirm(confirmMsg)) {
+                let idx = parseInt(document.getElementById('edit-member-idx').value);
+                db.members.splice(idx, 1);
+                saveStateToHardware();
+                closeModal('edit-member-modal');
+                buildMembersDirectory();
+                executeDashboardCalculations();
+            }
+        }
+
+        function invokeTransactionGateway(id) {
+            let targetMember = db.members.find(m => m.id === id);
+            if (!targetMember) return;
+
+            document.getElementById('trx-active-member-id').value = id;
+            document.getElementById('trx-modal-subtitle').innerText = `${targetMember.name} | Balance: Rs. ${targetMember.totalPaid}`;
+            document.getElementById('trx-custom-amount').value = db.settings.dailyContribution; 
+            openModal('trx-action-modal');
+        }
+
+        function commitPaymentExecution() {
+            let activeId = parseInt(document.getElementById('trx-active-member-id').value);
+            let inputAmount = parseInt(document.getElementById('trx-custom-amount').value);
+            if (isNaN(inputAmount) || inputAmount < 0) return alert(currentLang === 'ur' ? "درست رقم درج کریں" : "Invalid amount");
+
+            let targetMember = db.members.find(m => m.id === activeId);
+            if(targetMember) {
+                targetMember.totalPaid += inputAmount; 
+                saveStateToHardware();
+                closeModal('trx-action-modal');
+                buildCollectionInterface();
+                executeDashboardCalculations();
+            }
+        }
+
+        function buildLedgerMatrix() {
+            const matrixTarget = document.getElementById('ledger-rows-target');
+            matrixTarget.innerHTML = "";
+            let expectedThreshold = db.settings.dailyContribution * db.settings.payoutDays;
+
+            db.members.forEach((m, idx) => {
+                let dues = expectedThreshold - m.totalPaid;
+                let evaluationText = dues <= 0 ? i18n[currentLang].strFullyPaid : `Rs. ${dues}`;
+                let operationalColor = dues <= 0 ? "var(--status-paid)" : "var(--status-pending)";
+
+                matrixTarget.innerHTML += `
+                    <tr>
+                        <td class="eng-font"><b>${idx + 1}</b></td>
+                        <td class="beautiful-name" style="font-size: 18px !important;">${m.name}</td>
+                        <td class="eng-font">Rs. ${m.totalPaid}</td>
+                        <td style="color: ${operationalColor}; font-weight:700; font-family: var(--font-main);" class="${dues > 0 ? 'eng-font' : ''}">${evaluationText}</td>
+                        <td>${m.payoutReceived ? `<b style="color:var(--status-paid); font-family: var(--font-main);"><i class="fas fa-check"></i> ${i18n[currentLang].strDrawn}</b>` : '--'}</td>
+                    </tr>
+                `;
+            });
+            document.querySelectorAll('.stamp-placeholder').forEach(el => el.innerText = new Date().toLocaleString());
+        }
+
+        function openConfigModal() {
+            document.getElementById('cfg-sys-amount').value = db.settings.dailyContribution;
+            document.getElementById('cfg-sys-cycle').value = db.settings.payoutDays;
+            document.getElementById('cfg-sys-startdate').value = db.settings.startDate;
+            document.getElementById('cfg-sys-pin').value = db.settings.securityPin || "1234";
+            
+            openModal('config-sys-modal');
+        }
+
+        function processSystemConfigUpdate() {
+            let amt = parseInt(document.getElementById('cfg-sys-amount').value);
+            let cyc = parseInt(document.getElementById('cfg-sys-cycle').value);
+            let dt = document.getElementById('cfg-sys-startdate').value;
+            let pin = document.getElementById('cfg-sys-pin').value.trim();
+
+            if (amt > 0 && cyc > 0 && dt) {
+                if(pin.length < 4) {
+                    return alert(currentLang === 'ur' ? "پِن کوڈ کم از کم 4 ہندسوں پر مشتمل ہونا چاہیے۔" : "PIN must be at least 4 digits.");
+                }
+
+                db.settings.dailyContribution = amt;
+                db.settings.payoutDays = cyc;
+                db.settings.startDate = dt;
+                db.settings.securityPin = pin;
+                
+                saveStateToHardware();
+                closeModal('config-sys-modal');
+                executeDashboardCalculations();
+                alert(currentLang === 'ur' ? "ترتیبات کامیابی سے محفوظ ہو گئیں۔" : "Settings saved successfully.");
+            }
+        }
+
+        function resetAllBalances() {
+            let msg = currentLang === 'ur' 
+                ? "کیا آپ واقعی تمام ممبران کا بیلنس زیرو کرنا چاہتے ہیں؟ (یہ عمل ناقابلِ واپسی ہے اور نیا سائیکل شروع ہو جائے گا)" 
+                : "Are you sure you want to reset all balances to zero? This starts a new cycle and cannot be undone.";
+                
+            if(confirm(msg)) {
+                db.members.forEach(m => {
+                    m.totalPaid = 0;
+                    m.payoutReceived = false;
+                });
+                saveStateToHardware();
+                closeModal('config-sys-modal');
+                executeDashboardCalculations();
+                
+                if(document.getElementById('view-members').classList.contains('active')) buildMembersDirectory();
+                if(document.getElementById('view-collection').classList.contains('active')) buildCollectionInterface();
+                if(document.getElementById('view-reports').classList.contains('active')) buildLedgerMatrix();
+                
+                alert(currentLang === 'ur' ? "تمام ممبران کا بیلنس زیرو کر دیا گیا ہے۔ نیا سائیکل شروع ہو چکا ہے۔" : "All balances have been reset. New cycle started.");
+            }
+        }
+
+        function processMemberCreation() {
+            let name = document.getElementById('field-m-name').value.trim();
+            let phone = document.getElementById('field-m-phone').value.trim() || "N/A";
+            if(!name) return alert(currentLang === 'ur' ? "نام لازمی ہے!" : "Name is required!");
+
+            db.members.push({
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                totalPaid: 0,
+                payoutReceived: false
+            });
+
+            saveStateToHardware();
+            closeModal('add-member-modal');
+            buildMembersDirectory();
+            executeDashboardCalculations();
+            document.getElementById('field-m-name').value = "";
+            document.getElementById('field-m-phone').value = "";
+        }
+
+        function triggerDataExport() {
+            const blobString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const dlAnchorNode = document.createElement('a');
+            dlAnchorNode.setAttribute("href", blobString);
+            dlAnchorNode.setAttribute("download", `Muzammil_Committee_Backup.json`);
+            document.body.appendChild(dlAnchorNode);
+            dlAnchorNode.click();
+            dlAnchorNode.remove();
+        }
+
+        function triggerDataImport(event) {
+            const inputGate = event.target.files[0];
+            if (!inputGate) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let parsedData = JSON.parse(e.target.result);
+                    if (parsedData.members && parsedData.settings) {
+                        localStorage.setItem('__ROSCA_PRO_DB__', JSON.stringify(parsedData));
+                        alert(currentLang === 'ur' ? "ڈیٹا بیس کامیابی سے بحال ہو گیا ہے! براہ کرم نئے ڈیٹا کے ساتھ لاگ ان کریں۔" : "Database restored! Please log in again to view new data.");
+                        location.reload();
+                    }
+                } catch (err) { alert(currentLang === 'ur' ? "بیک اپ فائل خراب ہے۔" : "Invalid JSON Backup file."); }
+            };
+            reader.readAsText(inputGate);
+        }
+
+        function openModal(id) { 
+            const el = document.getElementById(id);
+            el.style.display = 'flex';
+            setTimeout(() => el.classList.add('active'), 10);
+        }
+        function closeModal(id) { 
+            const el = document.getElementById(id);
+            el.classList.remove('active');
+            setTimeout(() => el.style.display = 'none', 300);
+        }
+        function triggerThemeEngine() { document.body.classList.toggle('dark-mode'); }
+        function executeSystemPrint() { buildLedgerMatrix(); window.print(); }
+
+        // Progressive Web App Offline Asset Handler
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('ServiceWorker handling skipped. Run on a server for full setup.'));
+            });
+        }
+    </script>
+</body>
+</html>
