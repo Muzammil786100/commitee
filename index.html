@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ur" dir="rtl" id="app-html">
+<html lang="en" dir="ltr" id="app-html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -34,7 +34,7 @@
             /* Typography */
             --font-urdu: 'Noto Nastaliq Urdu', serif;
             --font-eng: 'Plus Jakarta Sans', sans-serif;
-            --font-main: var(--font-urdu);
+            --font-main: var(--font-eng);
         }
 
         html[dir="ltr"] { --font-main: var(--font-eng); }
@@ -190,7 +190,7 @@
         }
 
         .beautiful-name {
-            font-family: var(--font-urdu) !important;
+            font-family: var(--font-main) !important;
             font-size: 20px !important;
             font-weight: 700;
             line-height: 1.3;
@@ -231,8 +231,8 @@
         .nav-item:hover i { transform: translateY(-3px); color: var(--accent); }
 
         .table-responsive { width: 100%; overflow-x: auto; background: var(--surface); border-radius: var(--radius-md); border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
-        .ledger-table { width: 100%; border-collapse: collapse; text-align: right; }
-        html[dir="ltr"] .ledger-table { text-align: left; }
+        .ledger-table { width: 100%; border-collapse: collapse; text-align: left; }
+        html[dir="rtl"] .ledger-table { text-align: right; }
         .ledger-table th, .ledger-table td { padding: 16px 20px; font-size: 15px; border-bottom: 1px solid var(--border); }
         .ledger-table th { background: var(--bg-main); color: var(--text-muted); font-weight: 700; font-size: 16px; }
         .ledger-table td.eng-font { font-family: var(--font-eng); }
@@ -273,25 +273,25 @@
     <div id="login-screen" class="screen active">
         <div class="login-card">
             <div style="font-size: 56px; color: #2563eb; margin-bottom: 16px;"><i class="fas fa-sack-dollar"></i></div>
-            <h2 data-i18n="appTitle">مزمل حسین کمیٹی</h2>
-            <p data-i18n="appSub" style="color: var(--text-muted); font-size: 16px; margin-bottom: 10px;">کمیٹی مینجمنٹ سسٹم</p>
+            <h2 data-i18n="appTitle">Muzammil Hussain Committee</h2>
+            <p data-i18n="appSub" style="color: var(--text-muted); font-size: 16px; margin-bottom: 10px;">Committee Management System</p>
             <div class="pin-container">
-                <input type="text" id="login-name" class="login-input" placeholder="اپنا نام درج کریں (Enter Name)">
+                <input type="text" id="login-name" class="login-input" placeholder="Enter Name">
                 <input type="password" id="pin-field" class="login-input pin-input" placeholder="••••" maxlength="4" pattern="[0-9]*" inputmode="numeric">
             </div>
-            <button onclick="attemptAuthentication()" class="btn btn-primary" data-i18n="loginBtn"><i class="fas fa-lock-open"></i> لاگ اِن / رسائی حاصل کریں</button>
+            <button onclick="attemptAuthentication()" class="btn btn-primary" data-i18n="loginBtn"><i class="fas fa-lock-open"></i> Login / Access System</button>
         </div>
     </div>
 
     <div id="app-screen" class="screen">
         <header class="app-header">
             <div>
-                <h2 data-i18n="dashHeader">مزمل حسین کمیٹی</h2>
+                <h2 data-i18n="dashHeader">Muzammil Hussain Committee</h2>
                 <span id="global-subtitle" class="eng-text">Daily: Rs. 0 | Cycle: 0 Days</span>
             </div>
             <div style="display: flex; gap: 8px; align-items: center;">
                 <span id="network-status" style="color: var(--status-paid); background: rgba(16, 185, 129, 0.1);"><i class="fas fa-wifi"></i> Online</span>
-                <button onclick="toggleLanguage()" class="btn btn-secondary btn-sm" title="Change Language"><i class="fas fa-language"></i> <span id="lang-ind" class="eng-text" style="font-size:12px; font-weight:bold; margin-left:4px;">EN</span></button>
+                <button onclick="toggleLanguage()" class="btn btn-secondary btn-sm" title="Change Language"><i class="fas fa-language"></i> <span id="lang-ind" class="eng-text" style="font-size:12px; font-weight:bold; margin-left:4px;">UR</span></button>
                 <button onclick="triggerThemeEngine()" class="btn btn-secondary btn-sm"><i class="fas fa-moon"></i></button>
                 <button onclick="openConfigModal()" class="btn btn-secondary btn-sm"><i class="fas fa-sliders"></i></button>
             </div>
@@ -301,27 +301,27 @@
             <section id="view-dashboard" class="view active">
                 <div class="summary-grid">
                     <div class="summary-card">
-                        <p data-i18n="totMembers">کُل ممبران</p>
+                        <p data-i18n="totMembers">Total Members</p>
                         <h3 id="stat-total-members">0</h3>
                         <i class="fas fa-users"></i>
                     </div>
                     <div class="summary-card" style="border-top: 4px solid #3b82f6;">
-                        <p data-i18n="targetFund">متوقع فنڈ</p>
+                        <p data-i18n="targetFund">Targeted Fund</p>
                         <h3 id="stat-targeted-amount" style="color: #3b82f6;">Rs. 0</h3>
                         <i class="fas fa-bullseye"></i>
                     </div>
                     <div class="summary-card">
-                        <p data-i18n="totCollected">کل جمع شدہ رقم</p>
+                        <p data-i18n="totCollected">Total Collected</p>
                         <h3 id="stat-total-collected">Rs. 0</h3>
                         <i class="fas fa-wallet"></i>
                     </div>
                     <div class="summary-card" style="border-top: 4px solid var(--status-pending);">
-                        <p data-i18n="pendDues">بقایا جات</p>
+                        <p data-i18n="pendDues">Pending Dues</p>
                         <h3 id="stat-total-pending" style="color: var(--status-pending);">Rs. 0</h3>
                         <i class="fas fa-clock"></i>
                     </div>
-                    <div class="summary-card" style="border-right: 5px solid var(--status-paid); grid-column: span 2; background: rgba(16, 185, 129, 0.08);" id="payout-card-border">
-                        <p style="color: var(--status-paid); font-size: 16px;" data-i18n="currDraw">موجودہ قرعہ اندازی</p>
+                    <div class="summary-card" style="border-left: 5px solid var(--status-paid); grid-column: span 2; background: rgba(16, 185, 129, 0.08);" id="payout-card-border">
+                        <p style="color: var(--status-paid); font-size: 16px;" data-i18n="currDraw">Current Draw</p>
                         <h3 id="stat-next-receiver" style="font-size: 24px; color: var(--text-main); margin-top: 6px;" class="eng-text">--</h3>
                         <span id="stat-next-date" style="display:block; margin-top:8px; font-size:16px; font-weight:700; color: var(--status-paid); font-family: var(--font-eng);"><i class="fas fa-calendar-check"></i> Date: --</span>
                         <i class="fas fa-gift" style="color: var(--status-paid);"></i>
@@ -329,11 +329,11 @@
                 </div>
 
                 <div class="action-block" style="background: var(--surface); padding: 24px; border-radius: var(--radius-md); border:1px solid var(--border); box-shadow: var(--shadow-sm);">
-                    <h4 style="margin-bottom: 16px; font-size: 20px; font-weight: 700; color: var(--accent);" data-i18n="backupTitle">ڈیٹا بیک اپ اور ریکوری</h4>
+                    <h4 style="margin-bottom: 16px; font-size: 20px; font-weight: 700; color: var(--accent);" data-i18n="backupTitle">Data Backup & Recovery</h4>
                     <div style="display: flex; gap: 14px; flex-wrap: wrap;">
-                        <button onclick="triggerDataExport()" class="btn btn-primary" style="font-size: 16px; flex: 1;"><i class="fas fa-cloud-arrow-down"></i> <span data-i18n="btnBackup">بیک اپ ڈاؤنلوڈ</span></button>
+                        <button onclick="triggerDataExport()" class="btn btn-primary" style="font-size: 16px; flex: 1;"><i class="fas fa-cloud-arrow-down"></i> <span data-i18n="btnBackup">Download Backup</span></button>
                         <label class="btn btn-secondary" style="font-size: 16px; cursor: pointer; flex: 1; text-align: center; justify-content: center;">
-                            <i class="fas fa-cloud-arrow-up"></i> <span data-i18n="btnRestore">فائل ریسٹور کریں</span>
+                            <i class="fas fa-cloud-arrow-up"></i> <span data-i18n="btnRestore">Restore File</span>
                             <input type="file" id="import-gate" style="display: none;" onchange="triggerDataImport(event)" accept=".json">
                         </label>
                     </div>
@@ -342,19 +342,19 @@
 
             <section id="view-members" class="view">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="dirTitle">ممبران کی فہرست</h3>
-                    <button onclick="openModal('add-member-modal')" class="btn btn-primary btn-sm" style="padding: 10px 18px;"><i class="fas fa-user-plus"></i> <span data-i18n="newMember">نیا ممبر</span></button>
+                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="dirTitle">Members Directory</h3>
+                    <button onclick="openModal('add-member-modal')" class="btn btn-primary btn-sm" style="padding: 10px 18px;"><i class="fas fa-user-plus"></i> <span data-i18n="newMember">New Member</span></button>
                 </div>
                 <div class="search-container">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="member-search-input" class="form-control" placeholder="ممبر تلاش کریں..." onkeyup="buildMembersDirectory()">
+                    <input type="text" id="member-search-input" class="form-control" placeholder="Search members..." onkeyup="buildMembersDirectory()">
                 </div>
                 <div id="directory-render-target" class="list-container"></div>
             </section>
 
             <section id="view-collection" class="view">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="colTitle">روزانہ وصولی</h3>
+                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="colTitle">Daily Collection</h3>
                     <span id="live-date-stamp" class="eng-text" style="font-weight: 700; font-size: 15px; color: var(--accent); background: rgba(59, 130, 246, 0.1); padding: 6px 12px; border-radius: 8px;"></span>
                 </div>
                 <div id="collection-render-target" class="list-container"></div>
@@ -362,13 +362,13 @@
 
             <section id="view-reports" class="view">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;" class="action-block">
-                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="repTitle">تفصیلی کھاتہ رپورٹ</h3>
-                    <button onclick="executeSystemPrint()" class="btn btn-primary btn-sm" style="padding: 10px 18px;"><i class="fas fa-print"></i> <span data-i18n="printBtn">پرنٹ کریں</span></button>
+                    <h3 style="font-size: 24px; font-weight: 700;" data-i18n="repTitle">Ledger Report</h3>
+                    <button onclick="executeSystemPrint()" class="btn btn-primary btn-sm" style="padding: 10px 18px;"><i class="fas fa-print"></i> <span data-i18n="printBtn">Print Report</span></button>
                 </div>
 
                 <div id="print-zone-wrapper">
                     <div class="print-header">
-                        <h1 style="font-size: 30px; font-weight: 700; text-align: center; font-family: var(--font-urdu);" data-i18n="printHead">مزمل حسین کمیٹی کھاتہ رپورٹ</h1>
+                        <h1 style="font-size: 30px; font-weight: 700; text-align: center; font-family: var(--font-urdu);" data-i18n="printHead">Muzammil Hussain Committee Ledger</h1>
                         <p style="font-size: 16px; text-align: center; margin-top: 6px; font-family: var(--font-eng);">Report Generated on: <span class="stamp-placeholder"></span></p>
                         <hr style="margin: 20px 0; border: 0; border-top: 2px solid #0f172a;">
                     </div>
@@ -378,10 +378,10 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th data-i18n="thName">ممبر کا نام</th>
-                                    <th data-i18n="thPaid">جمع شدہ</th>
-                                    <th data-i18n="thDues">بقایا جات</th>
-                                    <th data-i18n="thStatus">سٹیٹس</th>
+                                    <th data-i18n="thName">Member Name</th>
+                                    <th data-i18n="thPaid">Paid</th>
+                                    <th data-i18n="thDues">Dues</th>
+                                    <th data-i18n="thStatus">Status</th>
                                 </tr>
                             </thead>
                             <tbody id="ledger-rows-target"></tbody>
@@ -393,94 +393,94 @@
 
         <nav class="bottom-nav">
             <button class="nav-item active" onclick="activateAppView('dashboard', this)">
-                <i class="fas fa-chart-pie"></i><span data-i18n="navDash">ڈیش بورڈ</span>
+                <i class="fas fa-chart-pie"></i><span data-i18n="navDash">Dashboard</span>
             </button>
             <button class="nav-item" onclick="activateAppView('members', this)">
-                <i class="fas fa-id-card-clip"></i><span data-i18n="navDir">ڈائریکٹری</span>
+                <i class="fas fa-id-card-clip"></i><span data-i18n="navDir">Directory</span>
             </button>
             <button class="nav-item" onclick="activateAppView('collection', this)">
-                <i class="fas fa-hand-holding-dollar"></i><span data-i18n="navCol">وصولی</span>
+                <i class="fas fa-hand-holding-dollar"></i><span data-i18n="navCol">Collection</span>
             </button>
             <button class="nav-item" onclick="activateAppView('reports', this)">
-                <i class="fas fa-book-open"></i><span data-i18n="navRep">کھاتہ</span>
+                <i class="fas fa-book-open"></i><span data-i18n="navRep">Ledger</span>
             </button>
         </nav>
     </div>
 
     <div id="add-member-modal" class="modal">
         <div class="modal-content">
-            <h3 class="modal-title" data-i18n="addMemTitle"><i class="fas fa-user-plus"></i> نیا ممبر شامل کریں</h3>
+            <h3 class="modal-title" data-i18n="addMemTitle"><i class="fas fa-user-plus"></i> Register Member</h3>
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemName">پورا نام</label>
-                <input type="text" id="field-m-name" class="form-control no-icon" style="font-family: var(--font-urdu);" placeholder="...">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemName">Full Name</label>
+                <input type="text" id="field-m-name" class="form-control no-icon" placeholder="Name...">
             </div>
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemPhone">موبائل نمبر</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemPhone">Mobile Number</label>
                 <input type="tel" id="field-m-phone" class="form-control no-icon" style="direction: ltr; text-align: left;" placeholder="0300XXXXXXX">
             </div>
             <div class="modal-footer">
-                <button onclick="closeModal('add-member-modal')" class="btn btn-secondary" data-i18n="btnCancel">منسوخ</button>
-                <button onclick="processMemberCreation()" class="btn btn-primary" data-i18n="btnSave"><i class="fas fa-check"></i> محفوظ کریں</button>
+                <button onclick="closeModal('add-member-modal')" class="btn btn-secondary" data-i18n="btnCancel">Cancel</button>
+                <button onclick="processMemberCreation()" class="btn btn-primary" data-i18n="btnSave"><i class="fas fa-check"></i> Save</button>
             </div>
         </div>
     </div>
 
     <div id="edit-member-modal" class="modal">
         <div class="modal-content">
-            <h3 class="modal-title" data-i18n="editMemTitle"><i class="fas fa-user-pen"></i> ممبر کی معلومات میں ترمیم</h3>
+            <h3 class="modal-title" data-i18n="editMemTitle"><i class="fas fa-user-pen"></i> Edit Member Info</h3>
             <input type="hidden" id="edit-member-idx">
             
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemName">نام</label>
-                <input type="text" id="field-edit-name" class="form-control no-icon" style="font-family: var(--font-urdu);">
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemName">Name</label>
+                <input type="text" id="field-edit-name" class="form-control no-icon">
             </div>
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemPhone">موبائل نمبر</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="addMemPhone">Mobile Number</label>
                 <input type="tel" id="field-edit-phone" class="form-control no-icon" style="direction: ltr; text-align: left;">
             </div>
             
             <hr style="margin: 24px 0; border: 0; border-top: 1px dashed var(--border);">
             
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block; color: var(--status-pending);" data-i18n="editMemBal">موجودہ بیلنس (ترمیم کے لیے)</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block; color: var(--status-pending);" data-i18n="editMemBal">Current Balance</label>
                 <input type="number" id="field-edit-bal" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold; font-size: 18px;">
             </div>
             
             <div style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; background: rgba(59, 130, 246, 0.05); padding: 14px; border-radius: var(--radius-sm); border: 1px solid rgba(59, 130, 246, 0.2);">
                 <input type="checkbox" id="field-edit-payout" style="width: 24px; height: 24px; accent-color: var(--accent); cursor: pointer;">
-                <label style="font-size: 17px; font-weight: 700; cursor: pointer; color: var(--accent);" for="field-edit-payout" data-i18n="editMemCheck">کیا اس ممبر کی کمیٹی نکل چکی ہے؟</label>
+                <label style="font-size: 17px; font-weight: 700; cursor: pointer; color: var(--accent);" for="field-edit-payout" data-i18n="editMemCheck">Has member received payout?</label>
             </div>
 
             <div class="modal-footer" style="display: flex; gap: 10px; align-items: stretch;">
                 <button onclick="processMemberDeletion()" class="btn" style="background: #f43f5e; color: white; padding: 10px 15px; flex: none;" data-i18n="btnDelete" title="Delete Member"><i class="fas fa-trash"></i></button>
-                <button onclick="closeModal('edit-member-modal')" class="btn btn-secondary" style="flex: 1;" data-i18n="btnCancel">منسوخ</button>
-                <button onclick="processMemberUpdate()" class="btn btn-primary" style="flex: 2;" data-i18n="btnSaveChanges"><i class="fas fa-floppy-disk"></i> محفوظ کریں</button>
+                <button onclick="closeModal('edit-member-modal')" class="btn btn-secondary" style="flex: 1;" data-i18n="btnCancel">Cancel</button>
+                <button onclick="processMemberUpdate()" class="btn btn-primary" style="flex: 2;" data-i18n="btnSaveChanges"><i class="fas fa-floppy-disk"></i> Save Changes</button>
             </div>
         </div>
     </div>
 
     <div id="config-sys-modal" class="modal">
         <div class="modal-content">
-            <h3 class="modal-title" data-i18n="cfgTitle"><i class="fas fa-gear"></i> سیستم کی ترتیبات</h3>
+            <h3 class="modal-title" data-i18n="cfgTitle"><i class="fas fa-gear"></i> System Settings</h3>
             
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgDaily">روزانہ کی قسط (Rs.)</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgDaily">Daily Installment (Rs.)</label>
                 <input type="number" id="cfg-sys-amount" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold;">
             </div>
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgCycle">کمیٹی کا دورانیہ (دن)</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgCycle">Payout Cycle (Days)</label>
                 <input type="number" id="cfg-sys-cycle" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold;">
             </div>
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgDate">شروع ہونے کی تاریخ</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgDate">Official Start Date</label>
                 <input type="date" id="cfg-sys-startdate" class="form-control no-icon" style="direction: ltr; font-family: var(--font-eng);">
             </div>
             
             <hr style="margin: 24px 0; border: 0; border-top: 1px dashed var(--border);">
             
-            <h4 data-i18n="cfgSecurity" style="margin-bottom: 15px; color: var(--accent); font-weight: 700;">سیکیورٹی اور رسائی</h4>
+            <h4 data-i18n="cfgSecurity" style="margin-bottom: 15px; color: var(--accent); font-weight: 700;">Security & Access</h4>
             <div style="margin-bottom: 20px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgPin">سسٹم کا پِن کوڈ (PIN)</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 8px; display: block;" data-i18n="cfgPin">System PIN Code</label>
                 <input type="text" id="cfg-sys-pin" class="form-control no-icon" style="direction: ltr; text-align: left; font-family: var(--font-eng); font-weight: bold;" maxlength="4">
             </div>
 
@@ -488,34 +488,34 @@
             
             <div style="margin-bottom: 20px;">
                 <button onclick="resetAllBalances()" class="btn btn-secondary" style="width: 100%; color: var(--status-pending); border-color: var(--status-pending);" data-i18n="btnReset">
-                    <i class="fas fa-rotate-right"></i> نیا سائیکل شروع کریں (بیلنس زیرو)
+                    <i class="fas fa-rotate-right"></i> New Cycle (Reset Balances)
                 </button>
             </div>
 
             <div class="modal-footer">
-                <button onclick="closeModal('config-sys-modal')" class="btn btn-secondary" data-i18n="btnClose">بند کریں</button>
-                <button onclick="processSystemConfigUpdate()" class="btn btn-primary" data-i18n="btnSave"><i class="fas fa-check"></i> محفوظ کریں</button>
+                <button onclick="closeModal('config-sys-modal')" class="btn btn-secondary" data-i18n="btnClose">Close</button>
+                <button onclick="processSystemConfigUpdate()" class="btn btn-primary" data-i18n="btnSave"><i class="fas fa-check"></i> Save</button>
             </div>
         </div>
     </div>
 
     <div id="trx-action-modal" class="modal">
         <div class="modal-content">
-            <h3 class="modal-title" data-i18n="trxTitle"><i class="fas fa-money-bill-wave"></i> وصولی شامل کریں</h3>
+            <h3 class="modal-title" data-i18n="trxTitle"><i class="fas fa-money-bill-wave"></i> Add Collection</h3>
             <div style="background: var(--bg-main); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); margin-bottom: 20px;">
-                <p id="trx-modal-subtitle" style="font-size: 17px; color: var(--text-main); font-family: var(--font-urdu); font-weight: bold; text-align: center; margin:0;"></p>
+                <p id="trx-modal-subtitle" style="font-size: 17px; color: var(--text-main); font-weight: bold; text-align: center; margin:0;"></p>
             </div>
             <input type="hidden" id="trx-active-member-id">
             
             <div style="margin-bottom: 24px;">
-                <label style="font-size: 16px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--accent); text-align: center;" data-i18n="trxAmount">وصولی کی رقم درج کریں</label>
+                <label style="font-size: 16px; font-weight: 700; margin-bottom: 10px; display: block; color: var(--accent); text-align: center;" data-i18n="trxAmount">Enter Collection Amount</label>
                 <input type="number" id="trx-custom-amount" class="form-control no-icon" style="font-weight: bold; font-size: 28px; color: var(--status-paid); direction: ltr; text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.05); border-color: var(--status-paid);">
             </div>
             
             <div style="display: flex; gap: 14px; margin-bottom: 12px;">
-                <button onclick="commitPaymentExecution()" class="btn btn-primary" style="background: var(--status-paid); width: 100%; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); font-size: 18px;"><i class="fas fa-plus-circle"></i> <span data-i18n="trxAdd">کھاتے میں شامل کریں</span></button>
+                <button onclick="commitPaymentExecution()" class="btn btn-primary" style="background: var(--status-paid); width: 100%; box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3); font-size: 18px;"><i class="fas fa-plus-circle"></i> <span data-i18n="trxAdd">Add to Ledger</span></button>
             </div>
-            <button onclick="closeModal('trx-action-modal')" class="btn btn-secondary" style="width: 100%;" data-i18n="btnCancel">منسوخ</button>
+            <button onclick="closeModal('trx-action-modal')" class="btn btn-secondary" style="width: 100%;" data-i18n="btnCancel">Cancel</button>
         </div>
     </div>
 
@@ -530,7 +530,7 @@
             }
         };
 
-        let currentLang = 'ur';
+        let currentLang = 'en';
         let pendingSync = false;
         
         const i18n = {
